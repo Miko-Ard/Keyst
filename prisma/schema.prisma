@@ -1,0 +1,33 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  date      DateTime @default(now())
+  wpm       Int
+  rawWpm    Int
+  accuracy  Float
+  duration  Int // seconds
+  feeling   String   @default("focused") // calm | focused | tired | frustrated | energized
+  notes     String   @default("")
+  createdAt DateTime @default(now())
+
+  @@index([date])
+}
+
+model Achievement {
+  id          String    @id @default(cuid())
+  key         String    @unique
+  title       String
+  description String
+  emoji       String
+  tone        String    @default("sage") // sage | lavender | blue | card
+  unlocked    Boolean   @default(false)
+  unlockedAt  DateTime?
+}
