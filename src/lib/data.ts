@@ -12,6 +12,8 @@ export async function getSessions(): Promise<SessionDTO[]> {
     rawWpm: r.rawWpm,
     accuracy: r.accuracy,
     duration: r.duration,
+    language: r.language,
+    testDuration: r.testDuration,
     feeling: r.feeling as Feeling,
     notes: r.notes,
   }));

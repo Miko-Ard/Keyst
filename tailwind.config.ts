@@ -9,22 +9,24 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "#F7F5F2",
-        surface: "#F2ECE3",
-        card: "#E8DDCF",
-        sage: "#DDE8E1",
-        lavender: "#DDD9EC",
-        blue: "#D8E6EC",
-        accent: "#3B3B3B",
+        background: "var(--background)",
+        surface: "var(--surface)",
+        card: "var(--card)",
+        sage: "var(--sage)",
+        lavender: "var(--lavender)",
+        blue: "var(--blue)",
+        accent: "var(--accent)",
         ink: {
-          DEFAULT: "#202020",
-          soft: "#6B6B6B",
+          DEFAULT: "var(--ink)",
+          soft: "var(--ink-soft)",
         },
-        border: "rgba(0,0,0,0.08)",
+        border: "var(--border)",
       },
       fontFamily: {
         serif: ["var(--font-newsreader)", "Georgia", "serif"],
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
+        display: ["var(--font-newsreader)", "Georgia", "serif"],
       },
       borderRadius: {
         xl: "16px",
@@ -50,9 +52,14 @@ const config: Config = {
           "0%": { opacity: "0", transform: "translateY(8px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        blink: {
+          "0%, 100%": { opacity: "1" },
+          "50%": { opacity: "0" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both",
+        caret: "blink 1s infinite step-end",
       },
     },
   },

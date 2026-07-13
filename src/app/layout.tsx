@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Newsreader } from "next/font/google";
+import { Inter, Newsreader, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -16,6 +16,13 @@ const newsreader = Newsreader({
   display: "swap",
 });
 
+const mono = Roboto_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  weight: ["400"],
+});
+
 export const metadata: Metadata = {
   title: "Keyst — Calm, focused typing practice",
   description:
@@ -28,7 +35,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${newsreader.variable}`}>
+    <html lang="en" className={`${inter.variable} ${newsreader.variable} ${mono.variable}`}>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme') || 'light';
+                  if (theme === 'dark') {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-screen bg-background font-sans text-ink antialiased">
         {children}
       </body>

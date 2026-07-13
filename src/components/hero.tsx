@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { ProgressRing } from "@/components/progress-ring";
@@ -47,6 +48,23 @@ export function Hero({ stats }: { stats: Stats }) {
               value={`${stats.goal} wpm`}
             />
           </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease, delay: 0.3 }}
+          >
+            <Link href="/type">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="mt-8 inline-flex items-center gap-2.5 rounded-full bg-[#3B3B3B] px-7 py-3.5 text-sm font-medium text-white shadow-md transition-shadow duration-200 hover:shadow-lg"
+              >
+                Start typing
+                <span aria-hidden>→</span>
+              </motion.button>
+            </Link>
+          </motion.div>
         </motion.div>
 
         {/* Right — progress, streak, goal */}

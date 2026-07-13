@@ -1,6 +1,5 @@
 generator client {
   provider      = "prisma-client-js"
-  // "native" for local dev; the rhel target is what Vercel's serverless runtime needs.
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
@@ -10,15 +9,17 @@ datasource db {
 }
 
 model Session {
-  id        String   @id @default(cuid())
-  date      DateTime @default(now())
-  wpm       Int
-  rawWpm    Int
-  accuracy  Float
-  duration  Int // seconds
-  feeling   String   @default("focused") // calm | focused | tired | frustrated | energized
-  notes     String   @default("")
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid())
+  date         DateTime @default(now())
+  wpm          Int
+  rawWpm       Int
+  accuracy     Float
+  duration     Int      // seconds (actual elapsed)
+  language     String   @default("english")
+  testDuration Int      @default(30) // selected test length in seconds
+  feeling      String   @default("focused") // calm | focused | tired | frustrated | energized
+  notes        String   @default("")
+  createdAt    DateTime @default(now())
 
   @@index([date])
 }

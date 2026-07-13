@@ -12,6 +12,8 @@ export interface SessionDTO {
   rawWpm: number;
   accuracy: number;
   duration: number; // seconds
+  language: string;
+  testDuration: number; // selected test length in seconds
   feeling: Feeling;
   notes: string;
 }
@@ -50,3 +52,10 @@ export const FEELINGS: {
   { value: "tired", label: "Tired", emoji: "🌙" },
   { value: "frustrated", label: "Frustrated", emoji: "🌧" },
 ];
+
+export const LANGUAGES = [
+  { value: "english", label: "English" },
+  { value: "indonesian", label: "Indonesian" },
+] as const;
+
+export const DURATIONS = [15, 30, 60, 120] as const;

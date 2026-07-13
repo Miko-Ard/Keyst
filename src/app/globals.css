@@ -6,6 +6,32 @@
   :root {
     --font-inter: "Inter", system-ui, sans-serif;
     --font-newsreader: "Newsreader", Georgia, serif;
+
+    /* Light Theme Palette */
+    --background: #F7F5F2;
+    --surface: #F2ECE3;
+    --card: #E8DDCF;
+    --sage: #DDE8E1;
+    --lavender: #DDD9EC;
+    --blue: #D8E6EC;
+    --accent: #3B3B3B;
+    --ink: #202020;
+    --ink-soft: #6B6B6B;
+    --border: rgba(0, 0, 0, 0.08);
+  }
+
+  .dark {
+    /* Dark Theme Palette (Anthropic Dark Editorial) */
+    --background: #1b1b18;
+    --surface: #262624;
+    --card: #31312f;
+    --sage: #2a352c;
+    --lavender: #312e3b;
+    --blue: #273035;
+    --accent: #e6e4d9;
+    --ink: #f9f9fb;
+    --ink-soft: #a19f93;
+    --border: rgba(255, 255, 255, 0.08);
   }
 
   html {
@@ -15,9 +41,10 @@
   }
 
   body {
-    background-color: #f7f5f2;
-    color: #202020;
+    background-color: var(--background);
+    color: var(--ink);
     font-feature-settings: "cv11", "ss01";
+    transition: background-color 0.25s cubic-bezier(0.22, 0.61, 0.36, 1), color 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
   }
 
   /* Numeric tabular alignment for stats */
@@ -26,8 +53,8 @@
   }
 
   ::selection {
-    background: #dde8e1;
-    color: #202020;
+    background: var(--sage);
+    color: var(--ink);
   }
 }
 
@@ -62,10 +89,19 @@
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(120, 120, 120, 0.15);
   border-radius: 999px;
-  border: 3px solid #f7f5f2;
+  border: 3px solid var(--background);
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 0, 0, 0.18);
+  background: rgba(120, 120, 120, 0.25);
+}
+
+@keyframes caretBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.animate-caret {
+  animation: caretBlink 1s infinite step-end;
 }

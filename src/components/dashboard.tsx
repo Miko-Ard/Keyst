@@ -4,7 +4,6 @@ import { useCallback, useState } from "react";
 import { Navbar } from "@/components/navbar";
 import { Hero } from "@/components/hero";
 import { StatCards } from "@/components/stat-cards";
-import { DailyLog } from "@/components/daily-log";
 import { Charts } from "@/components/charts";
 import { Achievements } from "@/components/achievements";
 import { RecentSessions } from "@/components/recent-sessions";
@@ -39,15 +38,18 @@ export function Dashboard({ initial }: { initial: Payload }) {
       <main className="pb-28">
         <Hero stats={data.stats} />
         <StatCards stats={data.stats} />
-        <DailyLog onSaved={refresh} />
         <Charts sessions={data.sessions} />
         <Achievements items={data.achievements} />
-        <RecentSessions sessions={data.sessions} />
+        <RecentSessions sessions={data.sessions} onSaved={refresh} />
       </main>
 
       <Footer />
 
-      <SettingsSheet open={settingsOpen} onClose={() => setSettingsOpen(false)} />
+      <SettingsSheet
+        open={settingsOpen}
+        onClose={() => setSettingsOpen(false)}
+        onSaved={refresh}
+      />
     </div>
   );
 }
