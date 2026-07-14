@@ -573,7 +573,7 @@ export function TypingTest() {
       <div className="min-h-screen bg-background flex flex-col">
         {/* Top bar */}
         <header className="border-b border-border/50">
-          <div className="mx-auto flex h-14 max-w-[950px] items-center justify-between px-5">
+          <div className="mx-auto flex h-14 max-w-[1250px] items-center justify-between px-5">
             <Link
               href="/"
               className="flex items-center gap-2 transition-opacity hover:opacity-70"
@@ -686,7 +686,7 @@ export function TypingTest() {
     >
       {/* Top bar */}
       <header className="border-b border-border/50">
-        <div className="mx-auto flex h-14 max-w-[950px] items-center justify-between px-5">
+        <div className="mx-auto flex h-14 max-w-[1250px] items-center justify-between px-5">
           <Link
             href="/"
             className="flex items-center gap-2 transition-opacity hover:opacity-70"
@@ -745,7 +745,7 @@ export function TypingTest() {
 
       {/* Main content — centered vertically */}
       <div className="flex-1 flex flex-col items-center justify-center">
-        <div className="w-full max-w-[950px] px-5">
+        <div className="w-full max-w-[1250px] px-5">
           {/* Config bar */}
           <div className="mb-8">{configBar}</div>
 
@@ -760,7 +760,7 @@ export function TypingTest() {
             <div className="relative overflow-hidden" style={{ height: "150px" }}>
               <div
                 ref={wordsInnerRef}
-                className="relative font-mono text-[1.4rem] leading-[2.2] tracking-[0.05em]"
+                className="relative font-mono text-[1.75rem] leading-[1.8] tracking-[0.03em]"
                 style={{
                   transform: `translateY(-${scrollOffset}px)`,
                   transition:
