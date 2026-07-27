@@ -10,6 +10,7 @@ datasource db {
 
 model Session {
   id           String   @id @default(cuid())
+  deviceId     String   @default("default")
   date         DateTime @default(now())
   wpm          Int
   rawWpm       Int
@@ -21,7 +22,7 @@ model Session {
   notes        String   @default("")
   createdAt    DateTime @default(now())
 
-  @@index([date])
+  @@index([deviceId, date])
 }
 
 model Achievement {

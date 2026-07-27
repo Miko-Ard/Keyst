@@ -6,11 +6,27 @@ import type { Feeling } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
-  const sessions = await getSessions();
+function getDeviceIdFromReq(req: Request, body?: any): string {
+  const headerId = req.headers.get("x-device-id");
+  if (headerId && headerId.trim()) return headerId.trim();
+
+  const { searchParams } = new URL(req.url);
+  const paramId = searchParams.get("deviceId");
+  if (paramId && paramId.trim()) return paramId.trim();
+
+  if (body && typeof body.deviceId === "string" && body.deviceId.trim()) {
+    return body.deviceId.trim();
+  }
+
+  return "default";
+}
+
+export async function GET(req: Request) {
+  const deviceId = getDeviceIdFromReq(req);
+  const sessions = await getSessions(deviceId);
   const achievements = await syncAchievements(sessions);
   const stats = computeStats(sessions);
-  return NextResponse.json({ sessions, achievements, stats });
+  return NextResponse.json({ sessions, achievements, stats, deviceId });
 }
 
 const FEELINGS = ["calm", "focused", "tired", "frustrated", "energized"];
@@ -18,6 +34,7 @@ const FEELINGS = ["calm", "focused", "tired", "frustrated", "energized"];
 export async function POST(req: Request) {
   try {
     const body = await req.json();
+    const deviceId = getDeviceIdFromReq(req, body);
 
     const wpm = clampInt(body.wpm, 0, 400);
     const rawWpm = clampInt(body.rawWpm ?? body.wpm, 0, 500);
@@ -41,6 +58,7 @@ export async function POST(req: Request) {
 
     await prisma.session.create({
       data: {
+        deviceId,
         wpm,
         rawWpm: rawWpm < wpm ? wpm : rawWpm,
         accuracy,
@@ -53,10 +71,10 @@ export async function POST(req: Request) {
       },
     });
 
-    const sessions = await getSessions();
+    const sessions = await getSessions(deviceId);
     const achievements = await syncAchievements(sessions);
     const stats = computeStats(sessions);
-    return NextResponse.json({ sessions, achievements, stats }, { status: 201 });
+    return NextResponse.json({ sessions, achievements, stats, deviceId }, { status: 201 });
   } catch (e) {
     console.error("POST /api/sessions error:", e);
     return NextResponse.json(
@@ -70,6 +88,7 @@ export async function DELETE(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
+    const deviceId = getDeviceIdFromReq(req);
 
     if (!id) {
       return NextResponse.json(
@@ -79,22 +98,24 @@ export async function DELETE(req: Request) {
     }
 
     if (id === "all") {
-      // Clear all sessions and lock achievements
-      await prisma.session.deleteMany();
-      await prisma.achievement.updateMany({
-        data: { unlocked: false, unlockedAt: null },
+      // Clear all sessions for this specific device
+      await prisma.session.deleteMany({
+        where: { deviceId },
       });
     } else {
-      // Delete single session
-      await prisma.session.delete({
-        where: { id },
+      // Delete single session (scoped to device if provided)
+      await prisma.session.deleteMany({
+        where: {
+          id,
+          deviceId,
+        },
       });
     }
 
-    const sessions = await getSessions();
+    const sessions = await getSessions(deviceId);
     const achievements = await syncAchievements(sessions);
     const stats = computeStats(sessions);
-    return NextResponse.json({ sessions, achievements, stats });
+    return NextResponse.json({ sessions, achievements, stats, deviceId });
   } catch (e) {
     console.error("DELETE /api/sessions error:", e);
     return NextResponse.json(

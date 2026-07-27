@@ -11,6 +11,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { LANGUAGES, DURATIONS } from "@/lib/types";
+import { getDeviceId } from "@/lib/device";
 
 import englishWords from "@/data/words/english.json";
 import indonesianWords from "@/data/words/indonesian.json";
@@ -212,10 +213,15 @@ export function TypingTest() {
 
     // Auto-save
     setSaving(true);
+    const deviceId = getDeviceId();
     fetch("/api/sessions", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "x-device-id": deviceId,
+      },
       body: JSON.stringify({
+        deviceId,
         wpm,
         rawWpm: raw,
         accuracy: acc,

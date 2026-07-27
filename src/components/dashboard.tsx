@@ -12,6 +12,7 @@ import { RecentSessions } from "@/components/recent-sessions";
 import { SettingsSheet } from "@/components/settings-sheet";
 import type { AchievementDTO, PeriodFilter, SessionDTO, Stats } from "@/lib/types";
 import { computePeriodStats, computeStats } from "@/lib/stats";
+import { getDeviceId } from "@/lib/device";
 
 interface Payload {
   sessions: SessionDTO[];
@@ -25,16 +26,15 @@ export function Dashboard({ initial }: { initial: Payload }) {
   const [period, setPeriod] = useState<PeriodFilter>("all");
   const [customGoal, setCustomGoal] = useState<number>(100);
 
-  useEffect(() => {
-    const savedGoal = localStorage.getItem("custom_wpm_goal");
-    if (savedGoal) {
-      setCustomGoal(Number(savedGoal) || 100);
-    }
-  }, []);
-
   const refresh = useCallback(async () => {
     try {
-      const res = await fetch("/api/sessions", { cache: "no-store" });
+      const deviceId = getDeviceId();
+      const res = await fetch("/api/sessions", {
+        cache: "no-store",
+        headers: {
+          "x-device-id": deviceId,
+        },
+      });
       if (!res.ok) return;
       const next = (await res.json()) as Payload;
       const savedGoal = localStorage.getItem("custom_wpm_goal");
@@ -48,6 +48,15 @@ export function Dashboard({ initial }: { initial: Payload }) {
       /* keep existing data on failure */
     }
   }, []);
+
+  useEffect(() => {
+    const savedGoal = localStorage.getItem("custom_wpm_goal");
+    if (savedGoal) {
+      setCustomGoal(Number(savedGoal) || 100);
+    }
+    // Sync client device sessions on mount
+    refresh();
+  }, [refresh]);
 
   const statsWithGoal = useMemo(() => {
     return computeStats(data.sessions, customGoal);

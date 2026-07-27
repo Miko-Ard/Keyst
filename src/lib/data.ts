@@ -3,8 +3,13 @@ import type { AchievementDTO, Feeling, SessionDTO } from "./types";
 import { ACHIEVEMENT_DEFS } from "./achievements";
 import { computeStreak } from "./stats";
 
-export async function getSessions(): Promise<SessionDTO[]> {
-  const rows = await prisma.session.findMany({ orderBy: { date: "asc" } });
+export async function getSessions(deviceId?: string): Promise<SessionDTO[]> {
+  const where = deviceId ? { deviceId } : {};
+  const rows = await prisma.session.findMany({
+    where,
+    orderBy: { date: "asc" },
+  });
+
   return rows.map((r) => ({
     id: r.id,
     date: r.date.toISOString(),

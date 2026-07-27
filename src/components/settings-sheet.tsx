@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import type { SessionDTO } from "@/lib/types";
+import { getDeviceId } from "@/lib/device";
 
 const ease = [0.22, 0.61, 0.36, 1] as const;
 
@@ -21,10 +22,12 @@ export function SettingsSheet({
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [customGoal, setCustomGoal] = useState<number>(100);
   const [clearing, setClearing] = useState(false);
+  const [deviceId, setDeviceId] = useState<string>("");
 
   useEffect(() => {
     const isDark = document.documentElement.classList.contains("dark");
     setTheme(isDark ? "dark" : "light");
+    setDeviceId(getDeviceId());
 
     const savedGoal = localStorage.getItem("custom_wpm_goal");
     if (savedGoal) {
@@ -113,8 +116,12 @@ export function SettingsSheet({
 
     setClearing(true);
     try {
+      const deviceId = getDeviceId();
       const res = await fetch("/api/sessions?id=all", {
         method: "DELETE",
+        headers: {
+          "x-device-id": deviceId,
+        },
       });
       if (res.ok) {
         if (onSaved) onSaved();
@@ -199,6 +206,10 @@ export function SettingsSheet({
               </div>
 
               <Row label="Theme variant" value="Warm editorial" />
+              <Row
+                label="Device Token"
+                value={deviceId ? `${deviceId.slice(0, 14)}...` : "Active"}
+              />
             </div>
 
             {/* Export Data */}

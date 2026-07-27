@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import type { SessionDTO } from "@/lib/types";
 import { FEELINGS } from "@/lib/types";
 import { formatDayMonth } from "@/lib/utils";
+import { getDeviceId } from "@/lib/device";
 
 const ease = [0.22, 0.61, 0.36, 1] as const;
 
@@ -30,8 +31,12 @@ export function RecentSessions({
     if (deletingId) return;
     setDeletingId(id);
     try {
+      const deviceId = getDeviceId();
       const res = await fetch(`/api/sessions?id=${id}`, {
         method: "DELETE",
+        headers: {
+          "x-device-id": deviceId,
+        },
       });
       if (res.ok && onSaved) {
         onSaved();
