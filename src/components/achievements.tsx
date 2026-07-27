@@ -16,7 +16,7 @@ export function Achievements({ items }: { items: AchievementDTO[] }) {
   const unlockedCount = items.filter((a) => a.unlocked).length;
 
   return (
-    <section className="mx-auto max-w-6xl px-5 pt-16 md:px-8">
+    <section className="w-full">
       <div className="mb-6 flex items-end justify-between">
         <div>
           <h2 className="font-display text-3xl tracking-tight text-ink">

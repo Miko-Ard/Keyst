@@ -44,7 +44,7 @@ export function RecentSessions({
   };
 
   return (
-    <section className="mx-auto max-w-6xl px-5 pt-16 md:px-8">
+    <section className="w-full">
       <div className="mb-6">
         <h2 className="font-display text-3xl tracking-tight text-ink">
           Recent sessions

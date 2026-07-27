@@ -2,42 +2,57 @@
 
 import { motion } from "framer-motion";
 import { Card } from "@/components/ui/card";
-import type { Stats } from "@/lib/types";
+import type { PeriodStats, Stats } from "@/lib/types";
+import { formatTotalTime } from "@/lib/utils";
 
 const ease = [0.22, 0.61, 0.36, 1] as const;
 
-export function StatCards({ stats }: { stats: Stats }) {
+export function StatCards({
+  stats,
+  periodStats,
+}: {
+  stats: Stats;
+  periodStats?: PeriodStats;
+}) {
+  const currentPeriod = periodStats || {
+    sessionCount: stats.totalSessions,
+    totalDurationSec: stats.totalDurationSec || 0,
+    avgWpm: stats.currentWpm,
+    bestWpm: stats.bestWpm,
+    avgAccuracy: stats.avgAccuracy,
+  };
+
   const items = [
     {
-      label: "Current WPM",
-      value: stats.currentWpm,
+      label: "Current Speed",
+      value: `${stats.currentWpm} WPM`,
       hint:
         stats.wpmDelta === 0
-          ? "steady"
+          ? "steady pace"
           : stats.wpmDelta > 0
-          ? `▲ ${stats.wpmDelta} vs last`
-          : `▼ ${Math.abs(stats.wpmDelta)} vs last`,
+          ? `▲ +${stats.wpmDelta} vs previous`
+          : `▼ ${stats.wpmDelta} vs previous`,
       tone: "sage",
     },
     {
-      label: "Best WPM",
-      value: stats.bestWpm,
+      label: "Best Speed",
+      value: `${stats.bestWpm} WPM`,
       hint: "personal record",
       tone: "card",
     },
     {
-      label: "Average Accuracy",
+      label: "Avg Accuracy",
       value: `${stats.avgAccuracy}%`,
-      hint: "last 10 sessions",
+      hint: "recent precision rate",
       tone: "blue",
     },
     {
-      label: "Current Streak",
-      value: stats.currentStreak,
-      hint: stats.currentStreak === 1 ? "day in a row" : "days in a row",
+      label: "Total Practice Time",
+      value: formatTotalTime(currentPeriod.totalDurationSec),
+      hint: `${stats.totalSessions} sessions logged`,
       tone: "lavender",
     },
-  ] as const;
+  ];
 
   const toneBar: Record<string, string> = {
     sage: "bg-[#9cbfa6]",
@@ -47,7 +62,7 @@ export function StatCards({ stats }: { stats: Stats }) {
   };
 
   return (
-    <section className="mx-auto max-w-6xl px-5 pt-16 md:px-8">
+    <section className="w-full">
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
         {items.map((item, i) => (
           <motion.div
@@ -67,7 +82,7 @@ export function StatCards({ stats }: { stats: Stats }) {
                   aria-hidden
                 />
               </div>
-              <p className="mt-6 font-display text-5xl tracking-tight text-ink tnum">
+              <p className="mt-5 font-display text-4xl font-semibold tracking-tight text-ink tnum md:text-5xl">
                 {item.value}
               </p>
               <p className="mt-2 text-sm text-ink-soft">{item.hint}</p>

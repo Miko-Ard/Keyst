@@ -39,6 +39,38 @@ export interface Stats {
   goal: number;
   goalProgress: number; // 0..1 toward goal based on best recent
   todayWpm: number | null;
+  totalDurationSec: number;
+}
+
+export type PeriodFilter = "daily" | "weekly" | "monthly" | "all";
+
+export interface LanguageStat {
+  language: string;
+  label: string;
+  sessionCount: number;
+  avgWpm: number;
+  bestWpm: number;
+}
+
+export interface FeelingStat {
+  feeling: Feeling;
+  label: string;
+  emoji: string;
+  sessionCount: number;
+  avgWpm: number;
+  avgAccuracy: number;
+}
+
+export interface PeriodStats {
+  period: PeriodFilter;
+  sessionCount: number;
+  totalDurationSec: number;
+  avgWpm: number;
+  bestWpm: number;
+  avgAccuracy: number;
+  languages: LanguageStat[];
+  feelings: FeelingStat[];
+  wpmTrendDelta: number;
 }
 
 export const FEELINGS: {

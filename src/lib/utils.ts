@@ -13,6 +13,21 @@ export function formatDuration(seconds: number): string {
   return `${m}m ${s}s`;
 }
 
+export function formatTotalTime(totalSeconds: number): string {
+  if (!totalSeconds || totalSeconds <= 0) return "0m";
+  const hours = Math.floor(totalSeconds / 3600);
+  const mins = Math.floor((totalSeconds % 3600) / 60);
+  const secs = totalSeconds % 60;
+
+  if (hours > 0) {
+    return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`;
+  }
+  if (mins > 0) {
+    return `${mins}m`;
+  }
+  return `${secs}s`;
+}
+
 export function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {
     month: "short",

@@ -14,7 +14,7 @@ export function Hero({ stats }: { stats: Stats }) {
     : stats.goalProgress;
 
   return (
-    <section className="mx-auto max-w-6xl px-5 pt-14 md:px-8 md:pt-20">
+    <section className="w-full pt-6 md:pt-10">
       <div className="grid items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
         {/* Left — editorial title */}
         <motion.div
